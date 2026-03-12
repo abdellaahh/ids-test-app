@@ -1,14 +1,30 @@
 from flask import Flask, request, jsonify
-import sqlite3
+import mysql.connector
 
 app = Flask(__name__)
 
+def get_connection():
+    conn = mysql.connector.connect(
+        host="cloudpro-mysql.mysql.database.azure.com",
+        user="mysqladmin@cloudpro-mysql",
+        password="Password123!",
+        database="idsappdb",
+        port=3306
+    )
+    return conn
+
+
 def query_db(query):
-    conn = sqlite3.connect("users.db")
+
+    conn = get_connection()
     cursor = conn.cursor()
+
     cursor.execute(query)
+
     result = cursor.fetchall()
+
     conn.close()
+
     return result
 
 
